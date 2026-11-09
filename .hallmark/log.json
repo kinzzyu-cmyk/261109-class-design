@@ -1,0 +1,36 @@
+﻿[
+  {
+    "mode": "redesign",
+    "depth": "full",
+    "scope": "app",
+    "theme": "studio",
+    "shape": "app screen",
+    "axes": "light/roman-serif/warm",
+    "hero": "none: app screen",
+    "nav": "teaching studio masthead",
+    "footer": "quiet colophon",
+    "imagery": "none",
+    "photos": [],
+    "entry": "teaching conversation",
+    "fingerprint": [
+      "split",
+      "left note",
+      "right conversation",
+      "paper",
+      "question index",
+      "compact colophon"
+    ],
+    "sections": [
+      "masthead",
+      "teaching note",
+      "conversation",
+      "composer",
+      "connection details",
+      "colophon"
+    ],
+    "signature": "teaching question index",
+    "waived": [],
+    "prompt": "디자이너를 양성하는 교사 직업에 맞게 다시 디자인",
+    "verification": "static 0 FAIL 0 REFLEX; render unavailable; in-thread code review only"
+  }
+]

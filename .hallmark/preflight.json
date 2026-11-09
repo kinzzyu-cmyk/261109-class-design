@@ -1,22 +1,27 @@
-{
+﻿{
   "scanned": "2026-11-09",
   "findings": {
-    "fonts": "system-ui / Pretendard fallback (src/style.css)",
-    "palette": "monotone neutral custom properties (src/style.css :root)",
-    "motion": "CSS transitions and keyframe loader (src/style.css)",
-    "spacing": "custom CSS lengths",
-    "framework": "Vite 8 + Vanilla JavaScript (package.json)"
+    "framework": "Vite 8 and vanilla JavaScript, package.json:1",
+    "runtime": "src/main.js previously replaced index.html; now binds to static accessible markup",
+    "fonts": "Studio theme with Noto Korean serif/sans fallbacks",
+    "palette": "Studio cool paper, ink and orange action",
+    "source_url": "Supplied Codespaces URL could not be accessed"
   },
   "preserve": [
-    "Vanilla JavaScript ES module setup (src/main.js)",
-    "Direct browser fetch to OpenAI Responses API (POST /v1/responses)",
-    "Environment variable VITE_OPENAI_API_KEY via .env.local",
-    "Monotone visual restraint requested by the user"
+    "Responses API fetch and model",
+    "conversation history",
+    "reset and error states",
+    "security notice"
   ],
   "introduce": [
-    "Hallmark v2.0.0 App Screen scope (--scope app)",
-    "Cobalt theme tokens and base rules (src/tokens.css, src/base.css)",
-    "Familjen Grotesk + IBM Plex Sans + JetBrains Mono typography",
-    "Eight-state controls, accessible form label and helper line, live request/response inspector"
-  ]
+    "teaching workspace",
+    "prompt starters",
+    "static no-script content",
+    "responsive split layout"
+  ],
+  "validation": {
+    "build": "passed",
+    "static": "0 FAIL, 0 REFLEX",
+    "render": "not run: puppeteer-core unavailable"
+  }
 }

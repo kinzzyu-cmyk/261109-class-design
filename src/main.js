@@ -1,5 +1,3 @@
-import './style.css'
-
 const OPENAI_RESPONSES_URL = 'https://api.openai.com/v1/responses'
 const OPENAI_MODEL = 'gpt-4.1-mini'
 
@@ -21,55 +19,6 @@ function hasConfiguredKey(key) {
  */
 let conversationHistory = []
 let isLoading = false
-
-const appRoot = document.querySelector('#app')
-
-appRoot.innerHTML = `
-  <main class="chat-shell">
-    <header class="chat-header">
-      <div class="header-top">
-        <div class="brand-group">
-          <h1 class="app-title">OpenAI Responses API 챗봇</h1>
-          <span class="model-tag" title="사용 모델">${OPENAI_MODEL}</span>
-        </div>
-        <div class="header-controls">
-          <div id="api-status-badge" class="status-badge" data-status="missing" role="status" aria-live="polite">
-            <span class="status-dot" aria-hidden="true"></span>
-            <span id="api-status-label">키 미설정</span>
-          </div>
-          <button id="reset-btn" type="button" class="btn btn-outline">
-            대화 초기화
-          </button>
-        </div>
-      </div>
-      <div id="api-status-bar" class="status-bar" data-status="missing">
-        <span id="api-status-detail"></span>
-        <span id="turn-counter" class="turn-counter">대화 0턴</span>
-      </div>
-    </header>
-
-    <section id="chat-messages" class="chat-messages" aria-live="polite"></section>
-
-    <footer class="chat-footer">
-      <form id="chat-form" class="chat-form">
-        <textarea
-          id="chat-input"
-          class="chat-input"
-          rows="1"
-          placeholder="메시지를 입력하세요 (Enter: 전송, Shift+Enter: 줄바꿈)"
-          aria-label="메시지 입력"
-        ></textarea>
-        <button id="send-btn" type="submit" class="btn btn-primary">
-          전송
-        </button>
-      </form>
-      <p class="security-notice">
-        <span>교육용 실습: 브라우저에서 직접 <code>POST /v1/responses</code>를 호출합니다.</span>
-        <span>주의: <code>VITE_*</code> 환경 변수는 브라우저에 노출되므로 공개 배포 금지</span>
-      </p>
-    </footer>
-  </main>
-`
 
 const statusBadgeEl = document.querySelector('#api-status-badge')
 const statusLabelEl = document.querySelector('#api-status-label')
@@ -139,15 +88,15 @@ function updateTurnCounter() {
 function renderEmptyState() {
   messagesContainerEl.innerHTML = `
     <div class="empty-state">
-      <p class="empty-state-title">대화를 시작해 보세요</p>
-      <p class="empty-state-desc">
-        입력한 메시지와 이전 대화 맥락이 함께 OpenAI Responses API로 전송되어 이어지는 질문에도 답변할 수 있습니다.
-      </p>
-      <div class="empty-state-meta">
-        <div>• 엔드포인트: <code>POST https://api.openai.com/v1/responses</code></div>
-        <div>• 사용 모델: <code>${OPENAI_MODEL}</code></div>
-        <div>• 문맥 유지: <code>input</code> 배열에 현재 대화 내역 전달</div>
+      <div class="opening-rule" aria-hidden="true"></div>
+      <h2>보는 눈을 기르는 수업,<br>좋은 질문에서 시작합니다.</h2>
+      <p class="empty-state-desc">수업의 아이디어부터 학생의 작업을 읽는 피드백까지,<br>선생님의 다음 질문을 함께 생각합니다.</p>
+      <div class="prompt-list" aria-label="질문 예시">
+        <button type="button" class="prompt" data-prompt="디자인 입문 학생을 위한 타이포그래피 수업을 설계하고 싶어요. 학습 목표부터 함께 정리해 주세요."><span>수업 설계</span><span>타이포그래피를 처음 가르친다면?</span><span aria-hidden="true">+</span></button>
+        <button type="button" class="prompt" data-prompt="학생의 포스터 작업을 피드백하려고 해요. 학생 스스로 개선점을 찾도록 돕는 질문을 제안해 주세요."><span>작업 피드백</span><span>스스로 발견하게 하는 질문은?</span><span aria-hidden="true">+</span></button>
+        <button type="button" class="prompt" data-prompt="결과물과 디자인 과정을 함께 평가하는 프로젝트 평가 기준을 만들고 싶어요. 어떤 항목부터 정하면 좋을까요?"><span>평가 기준</span><span>결과와 과정을 함께 살피려면?</span><span aria-hidden="true">+</span></button>
       </div>
+      <p class="empty-note">질문을 고르거나, 선생님의 고민을 직접 적어 주세요.</p>
     </div>
   `
 }
@@ -166,7 +115,7 @@ function appendMessageElement(role, text, isError = false) {
 
   const roleLabelEl = document.createElement('span')
   roleLabelEl.className = 'message-role'
-  roleLabelEl.textContent = role === 'user' ? '나 (User)' : isError ? '안내 (System)' : '챗봇 (Assistant)'
+  roleLabelEl.textContent = role === 'user' ? '선생님' : isError ? '연결 안내' : '수업 파트너'
 
   const bubbleEl = document.createElement('div')
   bubbleEl.className = 'message-bubble'
@@ -195,7 +144,7 @@ function showLoadingIndicator() {
 
   const roleLabelEl = document.createElement('span')
   roleLabelEl.className = 'message-role'
-  roleLabelEl.textContent = '챗봇 (Assistant)'
+  roleLabelEl.textContent = '수업 파트너'
 
   const bubbleEl = document.createElement('div')
   bubbleEl.className = 'message-bubble loading-bubble'
@@ -228,10 +177,12 @@ function scrollToBottom() {
  */
 function setLoadingState(loading) {
   isLoading = loading
+  sendBtnEl.setAttribute('aria-busy', String(loading))
+  messagesContainerEl.setAttribute('aria-busy', String(loading))
   sendBtnEl.disabled = loading
   resetBtnEl.disabled = loading
   chatInputEl.disabled = loading
-  sendBtnEl.textContent = loading ? '응답 대기 중...' : '전송'
+  sendBtnEl.textContent = loading ? '생각 중…' : '질문 보내기'
 }
 
 /**
@@ -324,6 +275,7 @@ async function handleSendMessage(event) {
 
   // 키 미설정 상태 확인
   if (!hasConfiguredKey(apiKey)) {
+    document.querySelector('.connection-details').open = true
     updateApiStatus(
       'missing',
       'API Key가 설정되지 않아 요청을 보낼 수 없습니다. <code>.env.local</code> 파일에 <code>VITE_OPENAI_API_KEY</code>를 입력한 뒤 개발 서버를 재시작해 주세요.'
@@ -354,6 +306,9 @@ async function handleSendMessage(event) {
       content: userText,
     },
   ]
+
+  document.querySelector('#payload-preview').textContent = JSON.stringify({ model: OPENAI_MODEL, input: requestInput }, null, 2)
+  document.querySelector('#inspector-meta').textContent = '요청 데이터'
 
   setLoadingState(true)
   showLoadingIndicator()
@@ -417,6 +372,8 @@ function handleResetConversation() {
   }
 
   conversationHistory = []
+  document.querySelector('#payload-preview').textContent = JSON.stringify({ model: OPENAI_MODEL, input: [] }, null, 2)
+  document.querySelector('#inspector-meta').textContent = '요청 대기'
   updateTurnCounter()
   renderEmptyState()
   chatInputEl.value = ''
@@ -451,3 +408,11 @@ if (hasConfiguredKey(apiKey)) {
 
 updateTurnCounter()
 renderEmptyState()
+
+messagesContainerEl.addEventListener('click', (event) => {
+  const prompt = event.target.closest('[data-prompt]')
+  if (!prompt || isLoading) return
+  chatInputEl.value = prompt.dataset.prompt
+  chatInputEl.dispatchEvent(new Event('input'))
+  chatInputEl.focus()
+})
