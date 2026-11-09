@@ -1,0 +1,22 @@
+{
+  "scanned": "2026-11-09",
+  "findings": {
+    "fonts": "system-ui / Pretendard fallback (src/style.css)",
+    "palette": "monotone neutral custom properties (src/style.css :root)",
+    "motion": "CSS transitions and keyframe loader (src/style.css)",
+    "spacing": "custom CSS lengths",
+    "framework": "Vite 8 + Vanilla JavaScript (package.json)"
+  },
+  "preserve": [
+    "Vanilla JavaScript ES module setup (src/main.js)",
+    "Direct browser fetch to OpenAI Responses API (POST /v1/responses)",
+    "Environment variable VITE_OPENAI_API_KEY via .env.local",
+    "Monotone visual restraint requested by the user"
+  ],
+  "introduce": [
+    "Hallmark v2.0.0 App Screen scope (--scope app)",
+    "Cobalt theme tokens and base rules (src/tokens.css, src/base.css)",
+    "Familjen Grotesk + IBM Plex Sans + JetBrains Mono typography",
+    "Eight-state controls, accessible form label and helper line, live request/response inspector"
+  ]
+}
